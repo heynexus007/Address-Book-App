@@ -1,14 +1,13 @@
 package com.bridgelabz.addressbookapp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "contacts")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +22,4 @@ public class Contact {
         this.phone = phone;
         this.email = email;
     }
-
-//    // Add Getters
-//    public String getName() { return name; }
-//    public String getPhone() { return phone; }
-//    public String getEmail() { return email; }
-//
-//    // Add Setters (if needed)
-//    public void setName(String name) { this.name = name; }
-//    public void setPhone(String phone) { this.phone = phone; }
-//    public void setEmail(String email) { this.email = email; }
 }

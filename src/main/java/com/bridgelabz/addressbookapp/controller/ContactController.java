@@ -2,20 +2,24 @@ package com.bridgelabz.addressbookapp.controller;
 
 import com.bridgelabz.addressbookapp.dto.ContactDTO;
 import com.bridgelabz.addressbookapp.model.Contact;
-import com.bridgelabz.addressbookapp.service.ContactService;
+import com.bridgelabz.addressbookapp.service.ContactServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contacts")
 public class ContactController {
 
     @Autowired
-    private ContactService contactService;
+    private ContactServiceInterface contactService;
+
+    @PostMapping
+    public ResponseEntity<Contact> addContact(@RequestBody ContactDTO contactDTO) {
+        return ResponseEntity.ok(contactService.addContact(contactDTO));
+    }
 
     @GetMapping
     public ResponseEntity<List<Contact>> getAllContacts() {
@@ -24,24 +28,17 @@ public class ContactController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
-        Optional<Contact> contact = contactService.getContactById(id);
-        return contact.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<Contact> createContact(@RequestBody ContactDTO contactDTO) {
-        Contact savedContact = contactService.saveContact(contactDTO);
-        return ResponseEntity.ok(savedContact);
+        return ResponseEntity.ok(contactService.getContactById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody ContactDTO updatedContactDTO) {
-        Contact contact = contactService.updateContact(id, updatedContactDTO);
-        return (contact != null) ? ResponseEntity.ok(contact) : ResponseEntity.notFound().build();
+    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody ContactDTO contactDTO) {
+        return ResponseEntity.ok(contactService.updateContact(id, contactDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
-        return contactService.deleteContact(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<String> deleteContact(@PathVariable Long id) {
+        contactService.deleteContact(id);
+        return ResponseEntity.ok("Contact deleted successfully.");
     }
 }
