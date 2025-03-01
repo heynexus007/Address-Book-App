@@ -1,10 +1,12 @@
 package com.bridgelabz.addressbookapp.controller;
 
+import com.bridgelabz.addressbookapp.dto.ContactDTO;
 import com.bridgelabz.addressbookapp.model.Contact;
 import com.bridgelabz.addressbookapp.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 import java.util.Optional;
 
@@ -17,8 +19,7 @@ public class ContactController {
 
     @GetMapping
     public ResponseEntity<List<Contact>> getAllContacts() {
-        List<Contact> contacts = contactService.getAllContacts();
-        return ResponseEntity.ok(contacts);
+        return ResponseEntity.ok(contactService.getAllContacts());
     }
 
     @GetMapping("/{id}")
@@ -28,14 +29,14 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
-        Contact savedContact = contactService.saveContact(contact);
+    public ResponseEntity<Contact> createContact(@RequestBody ContactDTO contactDTO) {
+        Contact savedContact = contactService.saveContact(contactDTO);
         return ResponseEntity.ok(savedContact);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact updatedContact) {
-        Contact contact = contactService.updateContact(id, updatedContact);
+    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody ContactDTO updatedContactDTO) {
+        Contact contact = contactService.updateContact(id, updatedContactDTO);
         return (contact != null) ? ResponseEntity.ok(contact) : ResponseEntity.notFound().build();
     }
 
