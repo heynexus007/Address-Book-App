@@ -25,8 +25,23 @@ public class ContactService {
         return contactRepository.findById(id);
     }
 
-    public void deleteContact(Long id) {
-        contactRepository.deleteById(id);
+    public boolean deleteContact(Long id) {
+        if (contactRepository.existsById(id)) {
+            contactRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public Contact updateContact(Long id, Contact updatedContact) {
+        return contactRepository.findById(id)
+                .map(contact -> {
+                    contact.setName(updatedContact.getName());
+                    contact.setPhone(updatedContact.getPhone());
+                    contact.setEmail(updatedContact.getEmail());
+                    return contactRepository.save(contact);
+                })
+                .orElse(null);
     }
 }
 
